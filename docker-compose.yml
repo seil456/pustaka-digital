@@ -35,7 +35,21 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
+  # phpMyAdmin (opsional, untuk melihat basis data via peramban)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: pustaka_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   db_data:
